@@ -1,0 +1,209 @@
+L3-SW1#show running-config
+Building configuration...
+
+Current configuration : 3596 bytes
+!
+version 12.2(37)SE1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname L3-SW1
+!
+!
+no profinet
+!
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.20
+ip dhcp excluded-address 192.168.20.1 192.168.20.20
+ip dhcp excluded-address 192.168.30.1 192.168.30.20
+!
+ip dhcp pool GAMING
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+ip dhcp pool STAFF
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+ip dhcp pool GUEST_WIFI
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 8.8.8.8
+!
+!
+ip routing
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$mERr$RldxcCZEZsTFTETUyRaA50
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name gamingcenter.local
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Port-channel1
+ description LACP-TO-ACCESS-SW1
+ switchport trunk allowed vlan 10,20,30,40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel2
+ description LACP-TO-ACCESS-SW2
+ switchport trunk allowed vlan 10,20,30,40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ switchport trunk allowed vlan 10,20,30,40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ switchport trunk allowed vlan 10,20,30,40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface FastEthernet0/3
+ switchport trunk allowed vlan 10,20,30,40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface FastEthernet0/4
+ switchport trunk allowed vlan 10,20,30,40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+ description TO-EDGE-R1
+ no switchport
+ ip address 10.0.0.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ description GAMING-GATEWAY
+ mac-address 0001.43e7.1301
+ ip address 192.168.10.1 255.255.255.0
+!
+interface Vlan20
+ description STAFF-GATEWAY
+ mac-address 0001.43e7.1302
+ ip address 192.168.20.1 255.255.255.0
+!
+interface Vlan30
+ description GUEST-WIFI-GATEWAY
+ mac-address 0001.43e7.1303
+ ip address 192.168.30.1 255.255.255.0
+!
+interface Vlan40
+ description SERVICES-GATEWAY
+ mac-address 0001.43e7.1304
+ ip address 192.168.40.1 255.255.255.0
+!
+interface Vlan99
+ description MANAGEMENT-GATEWAY
+ mac-address 0001.43e7.1305
+ ip address 192.168.99.1 255.255.255.0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.0.0.1 
+!
+ip flow-export version 9
+!
+!
+ip access-list extended GUEST-FILTER
+ permit udp any eq bootpc any eq bootps
+ deny ip 192.168.30.0 0.0.0.255 192.168.0.0 0.0.255.255
+ permit ip 192.168.30.0 0.0.0.255 any
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+!
+!
+!
+end
+
+
+L3-SW1
